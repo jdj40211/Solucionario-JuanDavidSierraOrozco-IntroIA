@@ -14,7 +14,7 @@ Repositorio con las actividades y laboratorios de clase resueltos. Cada carpeta 
 | 1 | Agentes racionales | [`clase1-agentes-racionales/`](clase1-agentes-racionales/) | Completa |
 | 3 | Optimización local | [`clase3-optimizacion/`](clase3-optimizacion/) | Completa |
 | 4 | Procesos de decisión de Markov | [`clase4-mdps/`](clase4-mdps/) | Completa |
-| 5 | Aprendizaje por refuerzo | [`clase5-reinforcement-learning/`](clase5-reinforcement-learning/) | Completa |
+| 5 | Aprendizaje por refuerzo | [`clase5-reinforcement-learning/`](clase5-reinforcement-learning/) | Completa (2 entregas) |
 
 ---
 
@@ -88,6 +88,23 @@ Resultados sobre 300 episodios de evaluación:
 Como en este mundo se conoce la solución óptima, es posible medir cuánto le falta al agente durante el entrenamiento: la pérdida media de valor cae de `52.5` en el primer episodio a `1.03` al final.
 
 El análisis de cierre discute por qué solo el 74.9% de las acciones aprendidas coinciden con las óptimas y aun así el desempeño es prácticamente idéntico. La causa no son empates entre caminos equivalentes, que representan apenas el 1.4% de los estados, sino que los errores se concentran en zonas alejadas del corredor que el agente recorre. Q-Learning aprende bien únicamente lo que visita.
+
+[`clase5-reinforcement-learning/verificacion_rostros_rl.ipynb`](clase5-reinforcement-learning/verificacion_rostros_rl.ipynb)
+
+Segundo ejercicio: verificación de identidad facial donde la decisión la toma una política aprendida con Q-Learning.
+
+El problema se separa en dos capas y solo la segunda usa refuerzo. La percepción se resuelve con PCA (eigenfaces) y distancia coseno contra una galería de 5 fotos por identidad, lo cual reduce cada caso a un número. Sobre esa señal, el agente aprende a elegir entre `aceptar`, `rechazar` y `pedir otra foto`, con un falso positivo penalizado cuatro veces más que un falso negativo.
+
+El aporte del refuerzo es aprender **cuándo todavía no conviene decidir**. Sin que nadie se lo indique, el agente descubre la franja de distancias donde las distribuciones de "misma persona" y "persona distinta" se solapan, y en esa zona pide evidencia adicional en lugar de arriesgarse.
+
+Resultados sobre identidades que el agente nunca vio durante el entrenamiento:
+
+| Método | Recompensa | Fotos usadas | Exactitud | Falsos positivos |
+|---|---|---|---|---|
+| Umbral fijo óptimo, 1 foto | 0.655 | 1.00 | 89.6% | 273 |
+| Política aprendida con RL | 0.679 | 1.77 | 91.2% | 215 |
+
+La reducción de falsos positivos es del 21%. Un experimento adicional barre el costo de pedir evidencia y muestra que la ventaja desaparece cuando ese costo supera aproximadamente `0.05`: a partir de ahí el agente deja de pedir fotos y su política colapsa a la del umbral fijo.
 
 ---
 
