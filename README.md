@@ -14,6 +14,7 @@ Repositorio con las actividades y laboratorios de clase resueltos. Cada carpeta 
 | 1 | Agentes racionales | [`clase1-agentes-racionales/`](clase1-agentes-racionales/) | Completa |
 | 3 | Optimización local | [`clase3-optimizacion/`](clase3-optimizacion/) | Completa |
 | 4 | Procesos de decisión de Markov | [`clase4-mdps/`](clase4-mdps/) | Completa |
+| 5 | Aprendizaje por refuerzo | [`clase5-reinforcement-learning/`](clase5-reinforcement-learning/) | Completa |
 
 ---
 
@@ -59,6 +60,34 @@ Laboratorio del robot de entregas en un almacén, resuelto de punta a punta.
 - El estado `(1,2)` es la bisagra de todo el problema. Con `gamma = 0.99` cambia únicamente ese estado, y eso basta para redirigir la ruta completa hacia la entrega.
 - El experimento del piso más resbaloso no cambia la política en ningún estado, solo empeora los valores, porque `(1,2)` es un cuello de botella sin ruta alternativa.
 - El punto de quiebre del costo por paso está en `living_reward` cercano a `-0.80`, y el cambio de comportamiento es abrupto, no gradual.
+
+---
+
+### Clase 5 — Aprendizaje por refuerzo
+
+[`clase5-reinforcement-learning/ejercicio_grid15_vi_pi_qlearning.ipynb`](clase5-reinforcement-learning/ejercicio_grid15_vi_pi_qlearning.ipynb)
+
+Ejercicio de clase: construir un grid de 15x15 con 5 obstáculos, un inicio y un final, y trazar el mejor camino entre ambos usando método de valores, política de dirección y aprendizaje por refuerzo, mostrando el avance a lo largo de las iteraciones.
+
+El mismo mundo se resuelve de tres maneras para poder compararlas. Las transiciones son estocásticas (`0.8 / 0.1 / 0.1`, la convención usada en clase), de modo que los obstáculos representan un riesgo real y el problema no se reduce a un camino más corto.
+
+**Método de valores (Value Iteration).** Converge en 58 iteraciones. Se incluyen imágenes del grid en las iteraciones 1, 2, 5, 15 y 30, donde se observa cómo el valor nace en la meta y se propaga hacia atrás una celda por barrido, más la curva de convergencia en escala logarítmica.
+
+**Política de dirección (Policy Iteration).** Converge en 18 iteraciones de política que suman 2766 barridos de evaluación, y llega exactamente a la misma política que Value Iteration, con cero estados en desacuerdo.
+
+**Aprendizaje por refuerzo (Q-Learning).** 5000 episodios con epsilon decreciente, partiendo de una tabla en cero y sin acceso a `T(s,a,s')`. El avance del entrenamiento se documenta con una tabla de progreso por checkpoint y con cuatro mapas de la política aprendida en distintos momentos.
+
+Resultados sobre 300 episodios de evaluación:
+
+| Método | Recompensa | Pasos | Llega a la meta |
+|---|---|---|---|
+| Value Iteration | 67.49 | 33.5 | 100% |
+| Policy Iteration | 67.49 | 33.5 | 100% |
+| Q-Learning | 67.11 | 33.9 | 100% |
+
+Como en este mundo se conoce la solución óptima, es posible medir cuánto le falta al agente durante el entrenamiento: la pérdida media de valor cae de `52.5` en el primer episodio a `1.03` al final.
+
+El análisis de cierre discute por qué solo el 74.9% de las acciones aprendidas coinciden con las óptimas y aun así el desempeño es prácticamente idéntico. La causa no son empates entre caminos equivalentes, que representan apenas el 1.4% de los estados, sino que los errores se concentran en zonas alejadas del corredor que el agente recorre. Q-Learning aprende bien únicamente lo que visita.
 
 ---
 
