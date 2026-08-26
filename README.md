@@ -15,6 +15,7 @@ Repositorio con las actividades y laboratorios de clase resueltos. Cada carpeta 
 | 3 | Optimización local | [`clase3-optimizacion/`](clase3-optimizacion/) | Completa |
 | 4 | Procesos de decisión de Markov | [`clase4-mdps/`](clase4-mdps/) | Completa |
 | 5 | Aprendizaje por refuerzo | [`clase5-reinforcement-learning/`](clase5-reinforcement-learning/) | Completa (2 entregas) |
+| 7 | Clasificación supervisada | [`clase7-clasificacion/`](clase7-clasificacion/) | Completa |
 
 ---
 
@@ -108,12 +109,34 @@ La reducción de falsos positivos es del 21%. Un experimento adicional barre el 
 
 ---
 
+### Clase 7 — Clasificación supervisada
+
+[`clase7-clasificacion/clasificadores_iris.ipynb`](clase7-clasificacion/clasificadores_iris.ipynb)
+
+Comparación de tres clasificadores sobre el dataset Iris (incluido en scikit-learn), con partición 70/30 estratificada: **LDA**, **K-NN (k=3)** y **Árbol de decisión**.
+
+Cada modelo se entrena primero con las 4 características (largo y ancho de sépalo y pétalo), que es el resultado real reportado como desempeño, y luego solo con largo y ancho de pétalo, las dos variables que mejor separan las especies, para poder dibujar las fronteras de decisión.
+
+Resultados sobre las 45 muestras de prueba, con las 4 características:
+
+| Modelo | Exactitud | Correctos | Incorrectos |
+|---|---|---|---|
+| LDA | 97.8% | 44 | 1 |
+| K-NN (k=3) | 95.6% | 43 | 2 |
+| Árbol de decisión | 93.3% | 42 | 3 |
+
+Ningún modelo confunde jamás la especie *setosa*, que es linealmente separable de las otras dos. Todos los errores, en los tres clasificadores, ocurren distinguiendo *versicolor* de *virginica*, que es donde las mediciones de las dos especies genuinamente se solapan.
+
+Las fronteras de decisión muestran el sesgo de cada algoritmo: LDA traza una única recta inclinada, K-NN una curva irregular ajustada al detalle local, y el árbol una sucesión de rectángulos por sus cortes perpendiculares a los ejes. Los casos mal clasificados de cada modelo aparecen siempre pegados a esa frontera, nunca dentro de una región limpia, lo que confirma que el error no es azar sino la zona genuinamente ambigua del problema.
+
+---
+
 ## Cómo ejecutar los notebooks
 
-Requieren `numpy` y `matplotlib`:
+Requieren `numpy`, `matplotlib` y `scikit-learn`:
 
 ```bash
-pip install numpy matplotlib jupyterlab
+pip install numpy matplotlib scikit-learn jupyterlab
 jupyter lab
 ```
 
