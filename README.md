@@ -16,6 +16,7 @@ Repositorio con las actividades y laboratorios de clase resueltos. Cada carpeta 
 | 4 | Procesos de decisión de Markov | [`clase4-mdps/`](clase4-mdps/) | Completa |
 | 5 | Aprendizaje por refuerzo | [`clase5-reinforcement-learning/`](clase5-reinforcement-learning/) | Completa (2 entregas) |
 | 7 | Clasificación supervisada | [`clase7-clasificacion/`](clase7-clasificacion/) | Completa |
+| 8 | Regresión | [`clase8-regresion/`](clase8-regresion/) | Completa |
 
 ---
 
@@ -130,6 +131,29 @@ Ningún modelo confunde jamás la especie *setosa*, que es linealmente separable
 La jerarquía LDA ≥ K-NN ≥ Árbol se mantiene en las tres particiones y se confirma con una validación cruzada de 5 pliegues sobre los 150 datos completos (LDA 98.0%, K-NN 96.7%, Árbol 95.3%), lo que descarta que sea un efecto de haber elegido justo la partición 70/30. El 100% de LDA y K-NN con 80/20 no significa un clasificador perfecto: el conjunto de prueba se reduce a 30 muestras y, en esa partición particular, no incluyó ninguno de los casos límite entre las dos especies que sí aparecen con otras proporciones — una ilustración directa de por qué una sola partición puede ser optimista o pesimista según el azar del muestreo.
 
 Las fronteras de decisión muestran el sesgo de cada algoritmo: LDA traza una única recta inclinada, K-NN una curva irregular ajustada al detalle local, y el árbol una sucesión de rectángulos por sus cortes perpendiculares a los ejes. Los casos mal clasificados de cada modelo aparecen siempre pegados a esa frontera, nunca dentro de una región limpia, lo que confirma que el error no es azar sino la zona genuinamente ambigua del problema.
+
+---
+
+### Clase 8 — Regresión
+
+[`clase8-regresion/regresion_california_housing.ipynb`](clase8-regresion/regresion_california_housing.ipynb)
+
+Comparación de regresión **lineal**, **polinomial** (grados 2 y 3) y **logarítmica**, con métricas, líneas de estimación y validación cruzada de 5 pliegues.
+
+**Nota sobre el dataset.** El enunciado pedía Boston Housing y California Housing. Boston Housing fue eliminado de scikit-learn desde la versión 1.2 por un problema ético documentado: incluye una variable que codifica composición racial bajo un supuesto discriminatorio. Este notebook usa solo California Housing (20640 viviendas, 8 variables), el reemplazo estándar en cualquier curso actual.
+
+Como una línea de estimación necesita un eje X, los cuatro modelos se ajustan primero sobre `MedInc` (ingreso medio de la zona), la variable más correlacionada con el precio:
+
+| Modelo | R² | MAE | RMSE | R² (5-fold CV) |
+|---|---|---|---|---|
+| Lineal | 0.473 | 0.623 | 0.832 | 0.421 |
+| Polinomial (grado 2) | 0.478 | 0.622 | 0.828 | 0.425 |
+| Polinomial (grado 3) | 0.483 | 0.616 | 0.824 | 0.433 |
+| Logarítmica | 0.451 | 0.646 | 0.849 | 0.392 |
+
+La curva logarítmica y las polinomiales capturan que el precio sube rápido con el ingreso bajo y se aplana después, algo que una recta no puede reproducir por no poder doblarse.
+
+**El hallazgo no pedido por el enunciado**: al repetir el experimento con las 8 variables completas, el polinomio de grado 2 rinde bien en una sola partición (R² 0.65) pero su validación cruzada explota a un R² medio de -25, con una desviación de 51. La causa es un outlier extremo en `AveOccup` (máximo de 1243 frente a un percentil 99 de apenas 5.4): al elevarlo al cuadrado, el modelo polinomial genera coeficientes disparatados en el pliegue donde ese dato cae. Escalar las variables no lo arregla, porque el escalado no le quita peso al outlier. Filtrando menos del 3% de las filas más extremas, la validación cruzada del polinomial se estabiliza (R² medio 0.658) y de paso mejora también al modelo lineal (0.610). La lección: entre más flexible es un modelo, más sensible es a la calidad de los datos que se le entregan.
 
 ---
 
