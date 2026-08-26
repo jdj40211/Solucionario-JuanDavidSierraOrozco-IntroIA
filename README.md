@@ -113,19 +113,21 @@ La reducción de falsos positivos es del 21%. Un experimento adicional barre el 
 
 [`clase7-clasificacion/clasificadores_iris.ipynb`](clase7-clasificacion/clasificadores_iris.ipynb)
 
-Comparación de tres clasificadores sobre el dataset Iris (incluido en scikit-learn), con partición 70/30 estratificada: **LDA**, **K-NN (k=3)** y **Árbol de decisión**.
+Comparación de tres clasificadores sobre el dataset Iris (incluido en scikit-learn) — **LDA**, **K-NN (k=3)** y **Árbol de decisión** — repetida sobre tres particiones estratificadas distintas: **70/30**, **60/40** y **80/20**.
 
-Cada modelo se entrena primero con las 4 características (largo y ancho de sépalo y pétalo), que es el resultado real reportado como desempeño, y luego solo con largo y ancho de pétalo, las dos variables que mejor separan las especies, para poder dibujar las fronteras de decisión.
+Cada modelo se entrena primero con las 4 características (largo y ancho de sépalo y pétalo), que es el resultado real reportado como desempeño, y luego solo con largo y ancho de pétalo, las dos variables que mejor separan las especies, para poder dibujar las fronteras de decisión. Esto se repite para las tres particiones, con una cuadrícula de 9 paneles (partición × modelo) para comparar las fronteras de un vistazo.
 
-Resultados sobre las 45 muestras de prueba, con las 4 características:
+Resultados con las 4 características, en cada partición:
 
-| Modelo | Exactitud | Correctos | Incorrectos |
+| Modelo | 70/30 | 60/40 | 80/20 |
 |---|---|---|---|
-| LDA | 97.8% | 44 | 1 |
-| K-NN (k=3) | 95.6% | 43 | 2 |
-| Árbol de decisión | 93.3% | 42 | 3 |
+| LDA | 97.8% (44/45) | 98.3% (59/60) | 100% (30/30) |
+| K-NN (k=3) | 95.6% (43/45) | 96.7% (58/60) | 100% (30/30) |
+| Árbol de decisión | 93.3% (42/45) | 95.0% (57/60) | 93.3% (28/30) |
 
-Ningún modelo confunde jamás la especie *setosa*, que es linealmente separable de las otras dos. Todos los errores, en los tres clasificadores, ocurren distinguiendo *versicolor* de *virginica*, que es donde las mediciones de las dos especies genuinamente se solapan.
+Ningún modelo confunde jamás la especie *setosa*, que es linealmente separable de las otras dos. Todos los errores, en los tres clasificadores y en las tres particiones, ocurren distinguiendo *versicolor* de *virginica*, que es donde las mediciones de las dos especies genuinamente se solapan.
+
+La jerarquía LDA ≥ K-NN ≥ Árbol se mantiene en las tres particiones y se confirma con una validación cruzada de 5 pliegues sobre los 150 datos completos (LDA 98.0%, K-NN 96.7%, Árbol 95.3%), lo que descarta que sea un efecto de haber elegido justo la partición 70/30. El 100% de LDA y K-NN con 80/20 no significa un clasificador perfecto: el conjunto de prueba se reduce a 30 muestras y, en esa partición particular, no incluyó ninguno de los casos límite entre las dos especies que sí aparecen con otras proporciones — una ilustración directa de por qué una sola partición puede ser optimista o pesimista según el azar del muestreo.
 
 Las fronteras de decisión muestran el sesgo de cada algoritmo: LDA traza una única recta inclinada, K-NN una curva irregular ajustada al detalle local, y el árbol una sucesión de rectángulos por sus cortes perpendiculares a los ejes. Los casos mal clasificados de cada modelo aparecen siempre pegados a esa frontera, nunca dentro de una región limpia, lo que confirma que el error no es azar sino la zona genuinamente ambigua del problema.
 
