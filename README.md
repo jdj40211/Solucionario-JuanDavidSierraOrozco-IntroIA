@@ -132,6 +132,14 @@ La jerarquía LDA ≥ K-NN ≥ Árbol se mantiene en las tres particiones y se c
 
 Las fronteras de decisión muestran el sesgo de cada algoritmo: LDA traza una única recta inclinada, K-NN una curva irregular ajustada al detalle local, y el árbol una sucesión de rectángulos por sus cortes perpendiculares a los ejes. Los casos mal clasificados de cada modelo aparecen siempre pegados a esa frontera, nunca dentro de una región limpia, lo que confirma que el error no es azar sino la zona genuinamente ambigua del problema.
 
+[`clase7-clasificacion/ejercicio3_subajuste_sobreajuste.ipynb`](clase7-clasificacion/ejercicio3_subajuste_sobreajuste.ipynb)
+
+Ejercicio 3: provocar subajuste y sobreajuste sobre Iris por dos vías —particiones inusuales (50/50, 60/40) y complejidad de modelo sin justificar (`k=7` en K-NN)— diagnosticando con la brecha entre exactitud de entrenamiento y de prueba.
+
+**La partición (Opción 1) no demostró la hipótesis ingenua.** Promediando 30 semillas por partición, el sobreajuste del árbol (siempre con 100% de exactitud en entrenamiento) se mantiene prácticamente constante entre 50/50 y 90/10, entre 0.047 y 0.057 de brecha, sin empeorar de forma clara con menos datos. Lo que sí cambia con la partición es el **ruido de la medición**: con 90/10 la desviación estándar del test accuracy casi se triplica respecto a 50/50, porque el conjunto de prueba queda en solo 15 muestras. La lección real: una partición inusual no arruina al modelo, arruina la **confiabilidad del diagnóstico** si no se repite.
+
+**La complejidad (Opción 2) sí mostró sub y sobreajuste genuinos, con una sorpresa.** `k=1` en K-NN sobreajusta de manual (train 100%, test 93.3%). Pero `k=7`, el valor que sugiere el enunciado como aumento injustificado, en realidad **mejora** la cross-validation (0.980 contra 0.967 de k=3), porque Iris es un dataset limpio y bien separado. El subajuste real solo aparece desde `k≈31`, y `k=105` (el tamaño exacto del set de entrenamiento) colapsa la exactitud a 0.333, el nivel de azar con 3 clases: el modelo pasa a votar siempre por la clase mayoritaria sin mirar dónde cae el punto, visible en la frontera de decisión como un plano de un solo color. El árbol de decisión repite la historia desde el otro extremo: `max_depth=1` subajusta (66.7% de exactitud, solo separa *setosa*), `max_depth=3` es el óptimo de cross-validation (0.973), y pasado ese punto el árbol "sin límite" no gana capacidad real —el número de hojas se estanca en 8 desde `depth=5`— pero sí sobreajusta visiblemente: una pequeña isla en la frontera de decisión existe únicamente para clasificar bien un solo punto de entrenamiento.
+
 ---
 
 ### Clase 8 — Regresión
