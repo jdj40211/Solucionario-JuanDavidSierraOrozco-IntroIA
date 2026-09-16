@@ -163,6 +163,12 @@ La curva logarítmica y las polinomiales capturan que el precio sube rápido con
 
 **El hallazgo no pedido por el enunciado**: al repetir el experimento con las 8 variables completas, el polinomio de grado 2 rinde bien en una sola partición (R² 0.65) pero su validación cruzada explota a un R² medio de -25, con una desviación de 51. La causa es un outlier extremo en `AveOccup` (máximo de 1243 frente a un percentil 99 de apenas 5.4): al elevarlo al cuadrado, el modelo polinomial genera coeficientes disparatados en el pliegue donde ese dato cae. Escalar las variables no lo arregla, porque el escalado no le quita peso al outlier. Filtrando menos del 3% de las filas más extremas, la validación cruzada del polinomial se estabiliza (R² medio 0.658) y de paso mejora también al modelo lineal (0.610). La lección: entre más flexible es un modelo, más sensible es a la calidad de los datos que se le entregan.
 
+[`clase8-regresion/recta_ruido_regresion.ipynb`](clase8-regresion/recta_ruido_regresion.ipynb)
+
+Ejercicio corto: generar 100 muestras aleatorias $(x,y)$ sobre una recta $y=mx+b$ con ruido gaussiano y pintarlas, usando $m=2.5$, $b=5.0$ y desviación del ruido $\sigma=2$.
+
+Se agrega un paso extra no pedido por el enunciado: ajustar una regresión lineal por mínimos cuadrados sobre los propios puntos generados y comparar contra los parámetros reales. El ajuste recupera $\hat{m}=2.408$ y $\hat{b}=5.430$ frente a los valores reales $m=2.5$ y $b=5.0$, con un error absoluto menor a 0.5 en ambos casos. Sirve para mostrar la idea central de la regresión lineal: aunque cada punto individual está desplazado por el ruido, minimizar el error cuadrático sobre las 100 muestras a la vez cancela ese ruido en promedio y recupera la recta real.
+
 ---
 
 ## Cómo ejecutar los notebooks
