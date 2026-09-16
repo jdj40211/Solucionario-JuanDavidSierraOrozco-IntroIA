@@ -132,11 +132,20 @@ La jerarquía LDA ≥ K-NN ≥ Árbol se mantiene en las tres particiones y se c
 
 Las fronteras de decisión muestran el sesgo de cada algoritmo: LDA traza una única recta inclinada, K-NN una curva irregular ajustada al detalle local, y el árbol una sucesión de rectángulos por sus cortes perpendiculares a los ejes. Los casos mal clasificados de cada modelo aparecen siempre pegados a esa frontera, nunca dentro de una región limpia, lo que confirma que el error no es azar sino la zona genuinamente ambigua del problema.
 
-[`clase7-clasificacion/ejercicio2_neurona_escalon.ipynb`](clase7-clasificacion/ejercicio2_neurona_escalon.ipynb) — **primera versión, se irá mejorando**
+[`clase7-clasificacion/ejercicio2_neurona_escalon.ipynb`](clase7-clasificacion/ejercicio2_neurona_escalon.ipynb) — **segunda iteración**
 
-Ejercicio 2: entrenar de forma iterativa una neurona artificial de 5 entradas con activación escalón (on/off), $\hat{y}=f(\sum_i w_i x_i)$, buscando los pesos que acerquen $\hat{y}$ al objetivo $y$. El enunciado mismo anticipa el resultado: se espera que falle.
+Ejercicio 2: entrenar de forma iterativa una neurona artificial de 5 entradas, buscando los pesos que acerquen $\hat{y}$ al objetivo $y$. Se desarrolla en dos partes que se construyen una sobre la otra.
 
-Y falla, de dos maneras verificadas por separado. Usando la derivada real de la función escalón (cero en casi todo punto), el descenso de gradiente no mueve un solo peso en 200 iteraciones: el MSE del primer epoch y del último son idénticos. Aplicando en cambio la regla delta ignorando que la activación no es diferenciable, los pesos sí cambian, pero divergen sin límite (la norma crece de 5.2 a 521.3 entre los epochs 50 y 4999) mientras el error queda congelado en 20.02, apenas 16% mejor que el piso de responder siempre la misma constante sin mirar los datos (23.73). Un control con activación lineal sobre los mismos datos recupera los 5 pesos reales con error menor a 0.06 en cada uno, lo que confirma que la falla es de la activación escalón, no de los datos ni del método.
+**Parte 1 — activación escalón (on/off), $\hat{y}=f(\sum_i w_i x_i)$.** El enunciado mismo anticipa el resultado: se espera que falle, y falla de dos maneras verificadas por separado. Usando la derivada real de la función escalón (cero en casi todo punto), el descenso de gradiente no mueve un solo peso en 200 iteraciones: el MSE del primer epoch y del último son idénticos. Aplicando en cambio la regla delta ignorando que la activación no es diferenciable, los pesos sí cambian, pero divergen sin límite (la norma crece de 5.2 a 521.3 entre los epochs 50 y 4999) mientras el error queda congelado en 20.02, apenas 16% mejor que el piso de responder siempre la misma constante sin mirar los datos (23.73). Un control con activación lineal sobre los mismos datos recupera los 5 pesos reales con error menor a 0.06 en cada uno, lo que confirma que la falla es de la activación escalón, no de los datos ni del método.
+
+**Parte 2 — cambiar a activación sigmoide, con función de costo MSE explícita y offset.** Repetir la Parte 1 cambiando solo la activación no basta: sobre el mismo objetivo sin acotar, la sigmoide apenas mejora (MSE 19.98 contra 20.02 del escalón), porque el 84% de sus predicciones terminan saturadas en 0 o 1, reconstruyendo por su cuenta algo parecido a un escalón. La falla real de la Parte 1 no era solo la falta de derivada: era que el rango de salida de la activación no coincide con el rango del objetivo. Repitiendo la estimación con un objetivo generado a través de una sigmoide real —la misma recta $w_{\text{real}}\cdot x+b_{\text{real}}$ observada como en regresión logística—, el MSE cae a $5.99\times10^{-4}$ y los pesos hallados quedan a una distancia de apenas $0.052$ de los reales en norma:
+
+| | $w_1$ | $w_2$ | $w_3$ | $w_4$ | $w_5$ | offset |
+|---|---|---|---|---|---|---|
+| Real | 1.500 | −2.000 | 0.800 | 3.000 | −1.200 | 0.500 |
+| Hallado | 1.485 | −1.971 | 0.796 | 2.966 | −1.179 | 0.501 |
+
+Moraleja de los dos ejercicios juntos: hacen falta dos condiciones a la vez para que una neurona entrenada por gradiente funcione, una activación diferenciable en todo su dominio y que esa activación pueda producir efectivamente los valores del objetivo. El escalón falla por lo primero; la sigmoide sobre un objetivo sin acotar falla por lo segundo, a pesar de cumplir lo primero.
 
 [`clase7-clasificacion/ejercicio3_subajuste_sobreajuste.ipynb`](clase7-clasificacion/ejercicio3_subajuste_sobreajuste.ipynb)
 
