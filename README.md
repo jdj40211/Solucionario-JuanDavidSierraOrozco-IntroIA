@@ -15,7 +15,7 @@ Repositorio con las actividades y laboratorios de clase resueltos. Cada carpeta 
 | 3 | Optimización local | [`clase3-optimizacion/`](clase3-optimizacion/) | Completa |
 | 4 | Procesos de decisión de Markov | [`clase4-mdps/`](clase4-mdps/) | Completa |
 | 5 | Aprendizaje por refuerzo | [`clase5-reinforcement-learning/`](clase5-reinforcement-learning/) | Completa (2 entregas) |
-| 7 | Clasificación supervisada | [`clase7-clasificacion/`](clase7-clasificacion/) | En progreso (Ejercicio 2) |
+| 7 | Clasificación supervisada | [`clase7-clasificacion/`](clase7-clasificacion/) | Completa (4 ejercicios) |
 | 8 | Regresión | [`clase8-regresion/`](clase8-regresion/) | Completa |
 
 ---
@@ -154,6 +154,22 @@ Ejercicio 3: provocar subajuste y sobreajuste sobre Iris por dos vías —partic
 **La partición (Opción 1) no demostró la hipótesis ingenua.** Promediando 30 semillas por partición, el sobreajuste del árbol (siempre con 100% de exactitud en entrenamiento) se mantiene prácticamente constante entre 50/50 y 90/10, entre 0.047 y 0.057 de brecha, sin empeorar de forma clara con menos datos. Lo que sí cambia con la partición es el **ruido de la medición**: con 90/10 la desviación estándar del test accuracy casi se triplica respecto a 50/50, porque el conjunto de prueba queda en solo 15 muestras. La lección real: una partición inusual no arruina al modelo, arruina la **confiabilidad del diagnóstico** si no se repite.
 
 **La complejidad (Opción 2) sí mostró sub y sobreajuste genuinos, con una sorpresa.** `k=1` en K-NN sobreajusta de manual (train 100%, test 93.3%). Pero `k=7`, el valor que sugiere el enunciado como aumento injustificado, en realidad **mejora** la cross-validation (0.980 contra 0.967 de k=3), porque Iris es un dataset limpio y bien separado. El subajuste real solo aparece desde `k≈31`, y `k=105` (el tamaño exacto del set de entrenamiento) colapsa la exactitud a 0.333, el nivel de azar con 3 clases: el modelo pasa a votar siempre por la clase mayoritaria sin mirar dónde cae el punto, visible en la frontera de decisión como un plano de un solo color. El árbol de decisión repite la historia desde el otro extremo: `max_depth=1` subajusta (66.7% de exactitud, solo separa *setosa*), `max_depth=3` es el óptimo de cross-validation (0.973), y pasado ese punto el árbol "sin límite" no gana capacidad real —el número de hojas se estanca en 8 desde `depth=5`— pero sí sobreajusta visiblemente: una pequeña isla en la frontera de decisión existe únicamente para clasificar bien un solo punto de entrenamiento.
+
+[`clase7-clasificacion/ejercicio4_ann_wine.ipynb`](clase7-clasificacion/ejercicio4_ann_wine.ipynb)
+
+Ejercicio 4: entrenar una ANN completa (no solo una neurona) para clasificar el Wine Dataset (178 vinos, 13 variables físico-químicas, 3 cultivares), con validación cruzada y partición 70/30. Arquitectura de una capa oculta, 13 entradas totalmente conectadas, activación sigmoide en ambas capas, 3 neuronas de salida (una por clase, codificación one-hot) y función de costo MSE, con backpropagation implementado desde cero.
+
+Es la continuación directa de los Ejercicios 2 y 3: backpropagation es la misma regla de la neurona única, aplicada dos veces en cadena, y hereda exactamente las mismas debilidades. **Se verifica antes de entrenar el modelo final**: `proline` va de 278 a 1680 mientras otras variables no pasan de 1, así que sin normalizar, el 100% de las neuronas ocultas satura y la exactitud cae a 38.9%, casi azar entre 3 clases. Estandarizando cada variable con la media y desviación del conjunto de entrenamiento (nunca con el de prueba, para no filtrar información), la exactitud sube a 98.1%, confirmada por una validación cruzada de 5 pliegues (98.3% ± 1.4%).
+
+Métricas de desempeño por clase, no solo exactitud global:
+
+| Clase | Precisión | Recall | F1 |
+|---|---|---|---|
+| class_0 | 0.947 | 1.000 | 0.973 |
+| class_1 | 1.000 | 0.952 | 0.976 |
+| class_2 | 1.000 | 1.000 | 1.000 |
+
+El único error del conjunto de prueba (53 de 54 correctas) es la misma muestra vista desde dos ángulos: le resta recall a `class_0` y precisión a `class_1`. La frontera de decisión, dibujada sobre las 2 variables más separables (`od280/od315_of_diluted_wines` y `proline`, encontradas por búsqueda entre los 78 pares posibles), muestra regiones curvas en vez de las rectas de un clasificador lineal o los rectángulos de un árbol, la firma visual de una capa oculta no lineal.
 
 ---
 
