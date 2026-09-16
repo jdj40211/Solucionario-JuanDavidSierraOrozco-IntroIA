@@ -15,7 +15,7 @@ Repositorio con las actividades y laboratorios de clase resueltos. Cada carpeta 
 | 3 | Optimización local | [`clase3-optimizacion/`](clase3-optimizacion/) | Completa |
 | 4 | Procesos de decisión de Markov | [`clase4-mdps/`](clase4-mdps/) | Completa |
 | 5 | Aprendizaje por refuerzo | [`clase5-reinforcement-learning/`](clase5-reinforcement-learning/) | Completa (2 entregas) |
-| 7 | Clasificación supervisada | [`clase7-clasificacion/`](clase7-clasificacion/) | Completa |
+| 7 | Clasificación supervisada | [`clase7-clasificacion/`](clase7-clasificacion/) | En progreso (Ejercicio 2) |
 | 8 | Regresión | [`clase8-regresion/`](clase8-regresion/) | Completa |
 
 ---
@@ -131,6 +131,12 @@ Ningún modelo confunde jamás la especie *setosa*, que es linealmente separable
 La jerarquía LDA ≥ K-NN ≥ Árbol se mantiene en las tres particiones y se confirma con una validación cruzada de 5 pliegues sobre los 150 datos completos (LDA 98.0%, K-NN 96.7%, Árbol 95.3%), lo que descarta que sea un efecto de haber elegido justo la partición 70/30. El 100% de LDA y K-NN con 80/20 no significa un clasificador perfecto: el conjunto de prueba se reduce a 30 muestras y, en esa partición particular, no incluyó ninguno de los casos límite entre las dos especies que sí aparecen con otras proporciones — una ilustración directa de por qué una sola partición puede ser optimista o pesimista según el azar del muestreo.
 
 Las fronteras de decisión muestran el sesgo de cada algoritmo: LDA traza una única recta inclinada, K-NN una curva irregular ajustada al detalle local, y el árbol una sucesión de rectángulos por sus cortes perpendiculares a los ejes. Los casos mal clasificados de cada modelo aparecen siempre pegados a esa frontera, nunca dentro de una región limpia, lo que confirma que el error no es azar sino la zona genuinamente ambigua del problema.
+
+[`clase7-clasificacion/ejercicio2_neurona_escalon.ipynb`](clase7-clasificacion/ejercicio2_neurona_escalon.ipynb) — **primera versión, se irá mejorando**
+
+Ejercicio 2: entrenar de forma iterativa una neurona artificial de 5 entradas con activación escalón (on/off), $\hat{y}=f(\sum_i w_i x_i)$, buscando los pesos que acerquen $\hat{y}$ al objetivo $y$. El enunciado mismo anticipa el resultado: se espera que falle.
+
+Y falla, de dos maneras verificadas por separado. Usando la derivada real de la función escalón (cero en casi todo punto), el descenso de gradiente no mueve un solo peso en 200 iteraciones: el MSE del primer epoch y del último son idénticos. Aplicando en cambio la regla delta ignorando que la activación no es diferenciable, los pesos sí cambian, pero divergen sin límite (la norma crece de 5.2 a 521.3 entre los epochs 50 y 4999) mientras el error queda congelado en 20.02, apenas 16% mejor que el piso de responder siempre la misma constante sin mirar los datos (23.73). Un control con activación lineal sobre los mismos datos recupera los 5 pesos reales con error menor a 0.06 en cada uno, lo que confirma que la falla es de la activación escalón, no de los datos ni del método.
 
 [`clase7-clasificacion/ejercicio3_subajuste_sobreajuste.ipynb`](clase7-clasificacion/ejercicio3_subajuste_sobreajuste.ipynb)
 
