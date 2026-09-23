@@ -17,6 +17,7 @@ Repositorio con las actividades y laboratorios de clase resueltos. Cada carpeta 
 | 5 | Aprendizaje por refuerzo | [`clase5-reinforcement-learning/`](clase5-reinforcement-learning/) | Completa (2 entregas) |
 | 7 | Clasificación supervisada | [`clase7-clasificacion/`](clase7-clasificacion/) | Completa (4 ejercicios) |
 | 8 | Regresión | [`clase8-regresion/`](clase8-regresion/) | Completa |
+| 8 | Redes convolucionales | [`clase8-convolucion-cnn/`](clase8-convolucion-cnn/) | En progreso |
 
 ---
 
@@ -199,6 +200,18 @@ La curva logarítmica y las polinomiales capturan que el precio sube rápido con
 Ejercicio corto: generar 100 muestras aleatorias $(x,y)$ sobre una recta $y=mx+b$ con ruido gaussiano y pintarlas, usando $m=2.5$, $b=5.0$ y desviación del ruido $\sigma=2$.
 
 Se agrega un paso extra no pedido por el enunciado: ajustar una regresión lineal por mínimos cuadrados sobre los propios puntos generados y comparar contra los parámetros reales. El ajuste recupera $\hat{m}=2.408$ y $\hat{b}=5.430$ frente a los valores reales $m=2.5$ y $b=5.0$, con un error absoluto menor a 0.5 en ambos casos. Sirve para mostrar la idea central de la regresión lineal: aunque cada punto individual está desplazado por el ruido, minimizar el error cuadrático sobre las 100 muestras a la vez cancela ese ruido en promedio y recupera la recta real.
+
+---
+
+### Clase 8: Redes convolucionales
+
+[`clase8-convolucion-cnn/convolucion_imagenes.ipynb`](clase8-convolucion-cnn/convolucion_imagenes.ipynb)
+
+Script que carga una imagen en RGB o en escala de grises, le aplica una convolución con un kernel de 3x3 **ingresado por el usuario** y muestra un subplot con la imagen original y la filtrada. El kernel se escribe fila por fila (acepta enteros, decimales y fracciones como `1/9`) o se elige de una lista de ocho predefinidos, y las filas inválidas se rechazan y se vuelven a pedir.
+
+La convolución está implementada a mano con NumPy, en una versión con ciclos anidados que es la fórmula literal de la clase y en una vectorizada, y se verificó contra SciPy en gris y en RGB. También reproduce el ejemplo numérico de la diapositiva (`C(0,0) = -74`). La salida guardada corresponde a un kernel de Sobel vertical.
+
+Dos observaciones que salieron del ejercicio. Lo que los frameworks llaman convolución es correlación cruzada, porque no invierten el kernel; para un kernel asimétrico como Sobel, invertirlo da exactamente el negativo del resultado. Y el kernel "sharpen" de la diapositiva, con un 8 al centro, suma 0 y por eso detecta bordes en vez de afilar; para afilar de verdad el kernel debe sumar 1, y se comprueba que identidad más bordes da el kernel de nitidez con un 9 al centro.
 
 ---
 
