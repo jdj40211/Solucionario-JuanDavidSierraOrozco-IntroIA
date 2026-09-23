@@ -17,7 +17,7 @@ Repositorio con las actividades y laboratorios de clase resueltos. Cada carpeta 
 | 5 | Aprendizaje por refuerzo | [`clase5-reinforcement-learning/`](clase5-reinforcement-learning/) | Completa (2 entregas) |
 | 7 | Clasificación supervisada | [`clase7-clasificacion/`](clase7-clasificacion/) | Completa (4 ejercicios) |
 | 8 | Regresión | [`clase8-regresion/`](clase8-regresion/) | Completa |
-| 8 | Redes convolucionales | [`clase8-convolucion-cnn/`](clase8-convolucion-cnn/) | En progreso |
+| 8 | Redes convolucionales | [`clase8-convolucion-cnn/`](clase8-convolucion-cnn/) | En progreso (4 ejercicios) |
 
 ---
 
@@ -213,6 +213,12 @@ La convolución está implementada a mano con NumPy, en una versión con ciclos 
 
 Dos observaciones que salieron del ejercicio. Lo que los frameworks llaman convolución es correlación cruzada, porque no invierten el kernel; para un kernel asimétrico como Sobel, invertirlo da exactamente el negativo del resultado. Y el kernel "sharpen" de la diapositiva, con un 8 al centro, suma 0 y por eso detecta bordes en vez de afilar; para afilar de verdad el kernel debe sumar 1, y se comprueba que identidad más bordes da el kernel de nitidez con un 9 al centro.
 
+[`clase8-convolucion-cnn/ejercicio2_dos_convoluciones.ipynb`](clase8-convolucion-cnn/ejercicio2_dos_convoluciones.ipynb)
+
+Ejercicio 2: aplicar dos convoluciones seguidas a una imagen, con dos kernels 3x3 distintos, de modo que el segundo filtro actúa sobre la salida del primero. Se usó un desenfoque gaussiano seguido de un kernel de relieve (emboss), elegido porque su efecto se nota con claridad sobre la imagen ya suavizada, a diferencia de un detector de bordes, que deja una imagen gris de poco contraste.
+
+Se comprobó con código que dos filtros 3x3 seguidos equivalen exactamente a uno solo de 5x5, la convolución de los dos kernels entre sí, y que el orden no importa. También que un ReLU entre los dos filtros rompe esa equivalencia, pero solo si el primer filtro produce valores negativos: con el gaussiano primero no cambia nada, y con el relieve primero descarta alrededor del 14% de los píxeles. Una comparación con ruido mostró que encadenar no siempre gana: con ruido leve el gaussiano previo empeora un poco el resultado (correlación de 0.957 contra 0.959), y con ruido fuerte lo mejora claramente (0.814 contra 0.643 con desviación 40).
+
 [`clase8-convolucion-cnn/ejercicio3_mapas_caracteristicas.ipynb`](clase8-convolucion-cnn/ejercicio3_mapas_caracteristicas.ipynb)
 
 Ejercicio 3: tomar una imagen RGB, aplicarle convolución con 3 kernels distintos de 3x3, ReLU a cada salida, y max pooling 2x2, y mostrar los mapas de características resultantes. Es el bloque `Conv → ReLU → Pool` de una CNN con tres filtros, y da un volumen de 3 mapas de 300x256.
@@ -224,6 +230,14 @@ Resultados medidos: ReLU deja en cero el 51% de los valores de cada mapa, y el m
 Al final se aplana el volumen (Flatten) en un vector de 230400 valores, con canales al final, de modo que los tres mapas quedan intercalados. Se verificó que el volumen se reconstruye exactamente a partir del vector.
 
 ![Vector aplanado](clase8-convolucion-cnn/vector_aplanado.png)
+
+[`clase8-convolucion-cnn/ejercicio4_segmentacion_yolov8.ipynb`](clase8-convolucion-cnn/ejercicio4_segmentacion_yolov8.ipynb)
+
+Ejercicio 4: segmentar los objetos de una imagen con YOLOv8. Se usó `yolov8n-seg` (segmentación de instancias) y no VGG, porque VGG es un clasificador que no entrega máscaras ni ubicación de los objetos. El usuario elige una imagen de prueba o carga la suya, junto con la confianza mínima, y el script devuelve y guarda la imagen segmentada, con una máscara de color por cada objeto; los datos de entrada se validan y se vuelve a preguntar si son inválidos.
+
+Se probó con mascotas (perro y gato), personas (incluida una foto con dos personas, cada una con su propia máscara) y accesorios de vestir. Mascotas y personas se segmentan bien, en decenas de milisegundos por imagen. Los elementos de vestir se cubren solo en parte: COCO trae corbata, mochila, cartera, paraguas y maleta, pero ninguna prenda (se comprobó que ninguna de diez clases de ropa existe en el modelo), así que la chaqueta o la camisa quedan dentro de la máscara de la persona. Segmentar prendas requeriría reentrenar con un conjunto de datos de moda, como en el notebook de entrenamiento con datos propios de la clase.
+
+El umbral de confianza resultó ser una decisión y no un detalle: en la foto de las dos personas, con 0.25 se detecta una sola corbata, y con 0.10 aparece la segunda pero también un duplicado de la primera (superposición de 0.85 entre las dos máscaras).
 
 ---
 
