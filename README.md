@@ -17,7 +17,7 @@ Repositorio con las actividades y laboratorios de clase resueltos. Cada carpeta 
 | 5 | Aprendizaje por refuerzo | [`clase5-reinforcement-learning/`](clase5-reinforcement-learning/) | Completa (2 entregas) |
 | 7 | Clasificación supervisada | [`clase7-clasificacion/`](clase7-clasificacion/) | Completa (4 ejercicios) |
 | 8 | Regresión | [`clase8-regresion/`](clase8-regresion/) | Completa |
-| 8 | Redes convolucionales | [`clase8-convolucion-cnn/`](clase8-convolucion-cnn/) | En progreso (4 ejercicios) |
+| 8 | Redes convolucionales | [`clase8-convolucion-cnn/`](clase8-convolucion-cnn/) | En progreso (5 ejercicios) |
 
 ---
 
@@ -238,6 +238,12 @@ Ejercicio 4: segmentar los objetos de una imagen con YOLOv8. Se usó `yolov8n-se
 Se probó con mascotas (perro y gato), personas (incluida una foto con dos personas, cada una con su propia máscara) y accesorios de vestir. Mascotas y personas se segmentan bien, en decenas de milisegundos por imagen. Los elementos de vestir se cubren solo en parte: COCO trae corbata, mochila, cartera, paraguas y maleta, pero ninguna prenda (se comprobó que ninguna de diez clases de ropa existe en el modelo), así que la chaqueta o la camisa quedan dentro de la máscara de la persona. Segmentar prendas requeriría reentrenar con un conjunto de datos de moda, como en el notebook de entrenamiento con datos propios de la clase.
 
 El umbral de confianza resultó ser una decisión y no un detalle: en la foto de las dos personas, con 0.25 se detecta una sola corbata, y con 0.10 aparece la segunda pero también un duplicado de la primera (superposición de 0.85 entre las dos máscaras).
+
+[`clase8-convolucion-cnn/ejercicio7_yolo_video.ipynb`](clase8-convolucion-cnn/ejercicio7_yolo_video.ipynb)
+
+Ejercicio 7: detectar objetos con YOLOv8 en un video que carga el usuario. Se usó `yolov8n` (detección) con seguimiento ByteTrack, y la función `detectar_video(ruta, salida, conf, cada_n)` escribe un video anotado (mp4, codec `mp4v`) y reporta cuadros de proceso por segundo, detecciones y objetos únicos por clase, y objetos por cuadro en el tiempo. El usuario da la ruta de su video (o usa el de ejemplo), la confianza y cada cuántos cuadros correr YOLO; las entradas inválidas se rechazan.
+
+El video de ejemplo es un clip de 10 s de una carretera, de Pexels, con 250 cuadros. Resultado medido: 1653 detecciones pero solo 58 identificadores únicos, así que contar por cuadro sobrestima unas 30 veces; y 58 sigue siendo una cota superior, porque los vehículos lejanos entran y salen del umbral de confianza y ByteTrack les cambia el identificador. Correr YOLO uno de cada tres cuadros sube la velocidad de unos 19 a unos 42 cuadros por segundo. El video de salida se reabrió con OpenCV y decodifica los 250 cuadros.
 
 ---
 
