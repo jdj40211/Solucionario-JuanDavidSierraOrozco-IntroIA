@@ -213,6 +213,18 @@ La convolución está implementada a mano con NumPy, en una versión con ciclos 
 
 Dos observaciones que salieron del ejercicio. Lo que los frameworks llaman convolución es correlación cruzada, porque no invierten el kernel; para un kernel asimétrico como Sobel, invertirlo da exactamente el negativo del resultado. Y el kernel "sharpen" de la diapositiva, con un 8 al centro, suma 0 y por eso detecta bordes en vez de afilar; para afilar de verdad el kernel debe sumar 1, y se comprueba que identidad más bordes da el kernel de nitidez con un 9 al centro.
 
+[`clase8-convolucion-cnn/ejercicio3_mapas_caracteristicas.ipynb`](clase8-convolucion-cnn/ejercicio3_mapas_caracteristicas.ipynb)
+
+Ejercicio 3: tomar una imagen RGB, aplicarle convolución con 3 kernels distintos de 3x3, ReLU a cada salida, y max pooling 2x2, y mostrar los mapas de características resultantes. Es el bloque `Conv → ReLU → Pool` de una CNN con tres filtros, y da un volumen de 3 mapas de 300x256.
+
+Se eligieron kernels sensibles a tres orientaciones (vertical, horizontal y diagonal) y se comprobó en las figuras que cada mapa reacciona a lo esperado: el vertical a las franjas de la bandera, el horizontal a los travesaños de las estrellas y a las cintas del uniforme, y el diagonal al hombro. La convolución multicanal sigue la definición de la clase (suma sobre los canales) y coincide con SciPy, y el max pooling coincide con una versión con ciclos y con la fórmula de tamaño de salida.
+
+Resultados medidos: ReLU deja en cero el 51% de los valores de cada mapa, y el max pooling reduce cuatro veces la cantidad de valores (de 307200 a 76800 por mapa) sin perder el máximo de ninguno. Se incluye además una variante con las tres convoluciones en cascada, porque el enunciado admite las dos lecturas; en ella cada etapa deja el mapa más disperso (51%, 54% y 56% de ceros).
+
+Al final se aplana el volumen (Flatten) en un vector de 230400 valores, con canales al final, de modo que los tres mapas quedan intercalados. Se verificó que el volumen se reconstruye exactamente a partir del vector.
+
+![Vector aplanado](clase8-convolucion-cnn/vector_aplanado.png)
+
 ---
 
 ## Cómo ejecutar los notebooks
