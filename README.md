@@ -17,7 +17,7 @@ Repositorio con las actividades y laboratorios de clase resueltos. Cada carpeta 
 | 5 | Aprendizaje por refuerzo | [`clase5-reinforcement-learning/`](clase5-reinforcement-learning/) | Completa (2 entregas) |
 | 7 | Clasificación supervisada | [`clase7-clasificacion/`](clase7-clasificacion/) | Completa (4 ejercicios) |
 | 8 | Regresión | [`clase8-regresion/`](clase8-regresion/) | Completa |
-| 8 | Redes convolucionales | [`clase8-convolucion-cnn/`](clase8-convolucion-cnn/) | En progreso (5 ejercicios) |
+| 8 | Redes convolucionales | [`clase8-convolucion-cnn/`](clase8-convolucion-cnn/) | En progreso (6 ejercicios) |
 
 ---
 
@@ -238,6 +238,14 @@ Ejercicio 4: segmentar los objetos de una imagen con YOLOv8. Se usó `yolov8n-se
 Se probó con mascotas (perro y gato), personas (incluida una foto con dos personas, cada una con su propia máscara) y accesorios de vestir. Mascotas y personas se segmentan bien, en decenas de milisegundos por imagen. Los elementos de vestir se cubren solo en parte: COCO trae corbata, mochila, cartera, paraguas y maleta, pero ninguna prenda (se comprobó que ninguna de diez clases de ropa existe en el modelo), así que la chaqueta o la camisa quedan dentro de la máscara de la persona. Segmentar prendas requeriría reentrenar con un conjunto de datos de moda, como en el notebook de entrenamiento con datos propios de la clase.
 
 El umbral de confianza resultó ser una decisión y no un detalle: en la foto de las dos personas, con 0.25 se detecta una sola corbata, y con 0.10 aparece la segunda pero también un duplicado de la primera (superposición de 0.85 entre las dos máscaras).
+
+[`clase8-convolucion-cnn/ejercicio6_tracker_mano.ipynb`](clase8-convolucion-cnn/ejercicio6_tracker_mano.ipynb)
+
+Ejercicio 6: tracker de esqueleto de la mano con la cámara integrada. Se usó MediaPipe Hands (`HandLandmarker`), que encadena dos CNN: un detector de palma (BlazePalm) y un regresor que devuelve 21 puntos clave del recorte de la mano. El notebook explica la arquitectura, los 21 puntos y las conexiones del esqueleto, y define `procesar_frame` (esqueleto, puntos en píxeles, lateralidad y contador de dedos levantados) y `rastrear_en_vivo` (ventana con `cv2.VideoCapture(0)`, FPS y salida con la tecla `q`), con aviso del permiso de cámara en macOS y mensaje claro si la cámara no abre.
+
+La cámara real **no se pudo probar** al ejecutar el notebook sin pantalla. Las salidas guardadas vienen de una fotografía de una palma abierta de Wikimedia Commons (CC BY-SA 4.0) y de un video generado a partir de ella: 21 puntos y 5 dedos en la foto, mano detectada en los 60 cuadros del video a unos 60 FPS en CPU de un M4. Dos hallazgos: MediaPipe 0.10.30 en adelante quitó la API `mp.solutions` y solo queda `mp.tasks`, y con `mediapipe 1.0.1` el detector se cae en macOS (`Service is unavailable`), por lo que se usó 0.10.35. Además el modelo asume imagen espejada, así que con una foto normal la lateralidad viene invertida y el código la corrige.
+
+![Esqueleto de la mano](clase8-convolucion-cnn/ejercicio6_resultado.png)
 
 [`clase8-convolucion-cnn/ejercicio7_yolo_video.ipynb`](clase8-convolucion-cnn/ejercicio7_yolo_video.ipynb)
 
