@@ -20,7 +20,7 @@ Repositorio con las actividades y laboratorios de clase resueltos. Cada carpeta 
 | 7 | Clasificación supervisada | [`clase7-clasificacion/`](clase7-clasificacion/) | Completa (5 ejercicios) |
 | 7 | Clasificación supervisada | [`clase7-clasificacion/`](clase7-clasificacion/) | Completa (5 ejercicios + 3 notebooks de Keras) |
 | 8 | Regresión | [`clase8-regresion/`](clase8-regresion/) | Completa |
-| 8 | Redes convolucionales | [`clase8-convolucion-cnn/`](clase8-convolucion-cnn/) | En progreso (6 ejercicios) |
+| 8 | Redes convolucionales | [`clase8-convolucion-cnn/`](clase8-convolucion-cnn/) | En progreso (6 ejercicios y el taller de transfer learning) |
 
 ---
 
@@ -299,6 +299,14 @@ La cámara real **no se pudo probar** al ejecutar el notebook sin pantalla. Las 
 Ejercicio 7: detectar objetos con YOLOv8 en un video que carga el usuario. Se usó `yolov8n` (detección) con seguimiento ByteTrack, y la función `detectar_video(ruta, salida, conf, cada_n)` escribe un video anotado (mp4, codec `mp4v`) y reporta cuadros de proceso por segundo, detecciones y objetos únicos por clase, y objetos por cuadro en el tiempo. El usuario da la ruta de su video (o usa el de ejemplo), la confianza y cada cuántos cuadros correr YOLO; las entradas inválidas se rechazan.
 
 El video de ejemplo es un clip de 10 s de una carretera, de Pexels, con 250 cuadros. Resultado medido: 1653 detecciones pero solo 58 identificadores únicos, así que contar por cuadro sobrestima unas 30 veces; y 58 sigue siendo una cota superior, porque los vehículos lejanos entran y salen del umbral de confianza y ByteTrack les cambia el identificador. Correr YOLO uno de cada tres cuadros sube la velocidad de unos 19 a unos 42 cuadros por segundo. El video de salida se reabrió con OpenCV y decodifica los 250 cuadros.
+
+### Semana 8: Taller de transfer learning con datos propios
+
+[`clase8-convolucion-cnn/semana8_taller_transfer_learning.ipynb`](clase8-convolucion-cnn/semana8_taller_transfer_learning.ipynb)
+
+Taller del curso resuelto y ejecutado (TODO 1 a 6 y cierre conceptual). Clasifica tres comidas colombianas (arepa, empanada, buñuelo) con un dataset propio descargado con `ddgs` (1243 imágenes) y EfficientNetB0 de ImageNet: primero con la base congelada y luego con fine-tuning de las capas finales. En test (190 imágenes) la accuracy pasó de 0.9632 a 0.9737, una mejora de solo 2 imágenes que no es distinguible del azar. Incluye matrices de confusión, análisis de 8 errores y la evidencia de data leakage por fotos duplicadas entre splits. Corrió en CPU, no se subió el dataset.
+
+Los notebooks `CNN_Transfer_Keras3`, `Lecture_08_Yolo_training` y `Lecture_08_Yolo_training_own_data` del curso son demostraciones guiadas sin actividades para resolver, por eso no tienen entrega aparte.
 
 ---
 
