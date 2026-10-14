@@ -17,7 +17,7 @@ Repositorio con las actividades y laboratorios de clase resueltos. Cada carpeta 
 | 5 | Aprendizaje por refuerzo | [`clase5-reinforcement-learning/`](clase5-reinforcement-learning/) | Completa (2 entregas) |
 | 7 | Clasificación supervisada | [`clase7-clasificacion/`](clase7-clasificacion/) | Completa (5 ejercicios) |
 | 8 | Regresión | [`clase8-regresion/`](clase8-regresion/) | Completa |
-| 8 | Redes convolucionales | [`clase8-convolucion-cnn/`](clase8-convolucion-cnn/) | En progreso (6 ejercicios) |
+| 8 | Redes convolucionales | [`clase8-convolucion-cnn/`](clase8-convolucion-cnn/) | En progreso (7 ejercicios) |
 
 ---
 
@@ -242,6 +242,22 @@ Ejercicio 4: segmentar los objetos de una imagen con YOLOv8. Se usó `yolov8n-se
 Se probó con mascotas (perro y gato), personas (incluida una foto con dos personas, cada una con su propia máscara) y accesorios de vestir. Mascotas y personas se segmentan bien, en decenas de milisegundos por imagen. Los elementos de vestir se cubren solo en parte: COCO trae corbata, mochila, cartera, paraguas y maleta, pero ninguna prenda (se comprobó que ninguna de diez clases de ropa existe en el modelo), así que la chaqueta o la camisa quedan dentro de la máscara de la persona. Segmentar prendas requeriría reentrenar con un conjunto de datos de moda, como en el notebook de entrenamiento con datos propios de la clase.
 
 El umbral de confianza resultó ser una decisión y no un detalle: en la foto de las dos personas, con 0.25 se detecta una sola corbata, y con 0.10 aparece la segunda pero también un duplicado de la primera (superposición de 0.85 entre las dos máscaras).
+
+[`clase8-convolucion-cnn/ejercicio5_finetune_yolov8.ipynb`](clase8-convolucion-cnn/ejercicio5_finetune_yolov8.ipynb)
+
+Ejercicio 5: incluir un esquema de fine-tuning en la práctica de segmentación del Ejercicio 4. Se partió de `yolov8n-seg.pt` y se le enseñaron dos clases sobre Stanford Dogs: `labrador` y `gato`, donde **"gato" es una convención de la práctica y significa cualquier otro perro** (30 razas, no hay gatos reales). Se compararon tres modelos sobre el mismo conjunto de prueba: el baseline sin entrenar, el fine-tuning de toda la red y el fine-tuning con el backbone congelado (`freeze=10`), con 40 épocas cada uno.
+
+Stanford Dogs no trae máscaras, así que se generaron con `yolov8m-seg` como **pseudo-etiquetas** (no es anotación humana) y se filtraron: quedaron 311 fotos (136 labradores y 175 de otras razas), repartidas 70/15/15 por foto de origen, más collages 2x2 de cuatro razas para tener varias instancias por imagen. El dataset se reconstruye con `ejercicio5_finetune/prepare_dataset.py` y el entrenamiento con `ejercicio5_finetune/entrenar.py`; el notebook carga los resultados y pesos guardados de esa corrida en vez de repetir 40 minutos de entrenamiento.
+
+| Modelo | mAP50-95 máscara, perro sin importar la clase | mAP50-95 máscara, labrador contra "gato" |
+|---|---|---|
+| Baseline (sin entrenar) | 0.759 | no aplica |
+| Fine-tuning completo | 0.785 | 0.717 |
+| Fine-tuning backbone congelado | 0.810 | 0.706 |
+
+El fine-tuning enseña algo que el baseline no tenía (distinguir labrador de otras razas), pero la mejora en el contorno es pequeña: el conjunto de prueba tiene 130 instancias, hay una sola semilla y las máscaras de referencia son pseudo-etiquetas, así que la diferencia entre completo y congelado no permite declarar un ganador. El completo distingue mejor la clase (labrador 0.695 contra 0.639), y el congelado segmenta mejor al perro. Con las fotos del Ejercicio 4 se comprobó el **olvido**: los modelos entrenados ya no detectan personas, buses ni corbatas, y el completo llegó a inventar detecciones de `labrador` sobre personas y sobre un gato.
+
+![Predicciones en el conjunto de prueba](clase8-convolucion-cnn/ejercicio5_finetune/predicciones_test.png)
 
 [`clase8-convolucion-cnn/ejercicio6_tracker_mano.ipynb`](clase8-convolucion-cnn/ejercicio6_tracker_mano.ipynb)
 
