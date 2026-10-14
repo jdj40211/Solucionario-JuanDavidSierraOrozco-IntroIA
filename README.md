@@ -15,7 +15,7 @@ Repositorio con las actividades y laboratorios de clase resueltos. Cada carpeta 
 | 3 | Optimización local | [`clase3-optimizacion/`](clase3-optimizacion/) | Completa |
 | 4 | Procesos de decisión de Markov | [`clase4-mdps/`](clase4-mdps/) | Completa |
 | 5 | Aprendizaje por refuerzo | [`clase5-reinforcement-learning/`](clase5-reinforcement-learning/) | Completa (2 entregas) |
-| 7 | Clasificación supervisada | [`clase7-clasificacion/`](clase7-clasificacion/) | Completa (5 ejercicios) |
+| 7 | Clasificación supervisada | [`clase7-clasificacion/`](clase7-clasificacion/) | Completa (5 ejercicios + 3 notebooks de Keras) |
 | 8 | Regresión | [`clase8-regresion/`](clase8-regresion/) | Completa |
 | 8 | Redes convolucionales | [`clase8-convolucion-cnn/`](clase8-convolucion-cnn/) | En progreso (6 ejercicios) |
 
@@ -175,6 +175,19 @@ Métricas de desempeño por clase, no solo exactitud global:
 | class_2 | 1.000 | 1.000 | 1.000 |
 
 El único error del conjunto de prueba (53 de 54 correctas) es la misma muestra vista desde dos ángulos: le resta recall a `class_0` y precisión a `class_1`. La frontera de decisión, dibujada sobre las 2 variables más separables (`od280/od315_of_diluted_wines` y `proline`, encontradas por búsqueda entre los 78 pares posibles), muestra regiones curvas en vez de las rectas de un clasificador lineal o los rectángulos de un árbol, la firma visual de una capa oculta no lineal.
+
+
+[`clase7-clasificacion/semana7_challenge_cifar10_grises.ipynb`](clase7-clasificacion/semana7_challenge_cifar10_grises.ipynb)
+
+Challenge de Keras 3 del curso: red `Flatten → Dense(128, ReLU) → Dense(10)` sobre CIFAR-10 convertido a escala de grises (7 espacios `TODO` y 14 preguntas resueltas), ejecutada con TensorFlow en CPU, 10 épocas y batch de 64 como pide el enunciado. Resultado real: **36.30% de accuracy en prueba** (pérdida 1.7775), contra 87.89% de la misma idea en Fashion-MNIST. Las clases más fáciles son `ship` (57.6%) y `airplane` (43.3%); la más difícil, `cat` (19.2%). Brecha train/validación de solo 2 puntos: subajuste, no sobreajuste.
+
+[`clase7-clasificacion/semana7_challenge_olivetti.ipynb`](clase7-clasificacion/semana7_challenge_olivetti.ipynb)
+
+Challenge de Keras 3 con Olivetti Faces (400 rostros, 40 personas, partición estratificada 80/20): 6 espacios `TODO` y 15 preguntas resueltas. **Con la configuración exacta del enunciado la red no aprende**: accuracy de prueba 2.50% (2 de 80, azar) y pérdida congelada en 3.689 = ln 40. El notebook lo diagnostica en vez de ocultarlo: las 64 neuronas ocultas quedan muertas (salida 0 para todas las imágenes) porque las 4096 entradas son todas positivas. Con la misma arquitectura y la entrada centrada por píxel (media y desviación de entrenamiento), el accuracy de prueba es 95.0% a 97.5% según la semilla (4 semillas), con 100% en entrenamiento, es decir, sobreajuste real con solo 320 imágenes.
+
+[`clase7-clasificacion/semana7_fashion_mnist_red_profunda.ipynb`](clase7-clasificacion/semana7_fashion_mnist_red_profunda.ipynb)
+
+Notebook de clase sobre Fashion-MNIST (sin `TODO`; se resuelven los experimentos sugeridos al final). Regresión logística 84.42% contra red FC 784-128-10 87.89% en prueba. Las clases más difíciles son `Shirt` (63.1%) y `Coat` (76.0%), confundidas con `T-shirt/top` y `Pullover`. Diez variantes (segunda capa oculta, `tanh`, `sigmoid`, `Dropout`, `batch_size`, `lr`, 30 épocas) quedan entre 84.9% y 88.1%: ninguna supera de forma clara a la red base, y 30 épocas muestran sobreajuste (train 95.2%, test 87.6%).
 
 ---
 
