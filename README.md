@@ -14,16 +14,12 @@ Repositorio con las actividades y laboratorios de clase resueltos. Cada carpeta 
 | 1 | Agentes racionales | [`clase1-agentes-racionales/`](clase1-agentes-racionales/) | Completa |
 | 3 | Optimización local | [`clase3-optimizacion/`](clase3-optimizacion/) | Completa |
 | 4 | Procesos de decisión de Markov | [`clase4-mdps/`](clase4-mdps/) | Completa |
-| 5 | Aprendizaje por refuerzo | [`clase5-reinforcement-learning/`](clase5-reinforcement-learning/) | Completa (2 entregas) |
-| 6 | Pipeline de clasificación | [`clase6-pipeline-clasificacion/`](clase6-pipeline-clasificacion/) | Completa (3 challenges) |
 | 5 | Aprendizaje por refuerzo | [`clase5-reinforcement-learning/`](clase5-reinforcement-learning/) | Completa (4 entregas: 2 ejercicios y 2 notebooks de clase resueltos) |
-| 7 | Clasificación supervisada | [`clase7-clasificacion/`](clase7-clasificacion/) | Completa (5 ejercicios) |
+| 6 | Pipeline de clasificación | [`clase6-pipeline-clasificacion/`](clase6-pipeline-clasificacion/) | Completa (3 challenges) |
 | 7 | Clasificación supervisada | [`clase7-clasificacion/`](clase7-clasificacion/) | Completa (5 ejercicios + 3 notebooks de Keras) |
 | 8 | Regresión | [`clase8-regresion/`](clase8-regresion/) | Completa |
-| 8 | Redes convolucionales | [`clase8-convolucion-cnn/`](clase8-convolucion-cnn/) | En progreso (6 ejercicios y el taller de transfer learning) |
-| 8 | Redes convolucionales | [`clase8-convolucion-cnn/`](clase8-convolucion-cnn/) | En progreso (6 ejercicios) |
+| 8 | Redes convolucionales | [`clase8-convolucion-cnn/`](clase8-convolucion-cnn/) | En progreso (7 ejercicios y el taller de transfer learning) |
 | 9 | Chatbots con LLMs (NVIDIA NIM) | [`clase9-chatbots/`](clase9-chatbots/) | Resuelta; llamadas al modelo pendientes de API key |
-| 8 | Redes convolucionales | [`clase8-convolucion-cnn/`](clase8-convolucion-cnn/) | En progreso (7 ejercicios) |
 
 ---
 
