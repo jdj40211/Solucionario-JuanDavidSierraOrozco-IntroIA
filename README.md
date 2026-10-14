@@ -15,6 +15,7 @@ Repositorio con las actividades y laboratorios de clase resueltos. Cada carpeta 
 | 3 | Optimización local | [`clase3-optimizacion/`](clase3-optimizacion/) | Completa |
 | 4 | Procesos de decisión de Markov | [`clase4-mdps/`](clase4-mdps/) | Completa |
 | 5 | Aprendizaje por refuerzo | [`clase5-reinforcement-learning/`](clase5-reinforcement-learning/) | Completa (2 entregas) |
+| 6 | Pipeline de clasificación | [`clase6-pipeline-clasificacion/`](clase6-pipeline-clasificacion/) | Completa (3 challenges) |
 | 7 | Clasificación supervisada | [`clase7-clasificacion/`](clase7-clasificacion/) | Completa (5 ejercicios) |
 | 8 | Regresión | [`clase8-regresion/`](clase8-regresion/) | Completa |
 | 8 | Redes convolucionales | [`clase8-convolucion-cnn/`](clase8-convolucion-cnn/) | En progreso (6 ejercicios) |
@@ -108,6 +109,18 @@ Resultados sobre identidades que el agente nunca vio durante el entrenamiento:
 | Política aprendida con RL | 0.679 | 1.77 | 91.2% | 215 |
 
 La reducción de falsos positivos es del 21%. Un experimento adicional barre el costo de pedir evidencia y muestra que la ventaja desaparece cuando ese costo supera aproximadamente `0.05`: a partir de ahí el agente deja de pedir fotos y su política colapsa a la del umbral fijo.
+
+---
+
+### Clase 6 — Pipeline de clasificación
+
+[`clase6-pipeline-clasificacion/`](clase6-pipeline-clasificacion/)
+
+Los tres challenges del pipeline de clasificación aplicados al dataset Wine (178 muestras, 13 variables, 3 clases), ejecutados de punta a punta y encadenados por artefactos (`train.csv`, `test.csv`, `data_contract.json`, `champion_model.joblib`):
+
+- **Challenge 1, datos y EDA** (`semana6_challenge1_datos.ipynb`). Profiling (sin nulos ni duplicados), split estratificado 80/20, EDA solo sobre train con tres hallazgos y contrato de datos.
+- **Challenge 2, entrenamiento** (`semana6_challenge2_entrenamiento.ipynb`). Pipelines con preprocesamiento interno para árbol, regresión logística y KNN, validación cruzada de 5 folds y `GridSearchCV`. Campeón: regresión logística con accuracy de CV de 0.979.
+- **Challenge 3, evaluación e inferencia** (`semana6_challenge3_evaluacion_despliegue.ipynb`). Test abierto una sola vez: accuracy 0.972 y F1 macro 0.971, función `predict` con validación de esquema y predicciones por lotes.
 
 ---
 
