@@ -16,6 +16,7 @@ Repositorio con las actividades y laboratorios de clase resueltos. Cada carpeta 
 | 4 | Procesos de decisión de Markov | [`clase4-mdps/`](clase4-mdps/) | Completa |
 | 5 | Aprendizaje por refuerzo | [`clase5-reinforcement-learning/`](clase5-reinforcement-learning/) | Completa (2 entregas) |
 | 6 | Pipeline de clasificación | [`clase6-pipeline-clasificacion/`](clase6-pipeline-clasificacion/) | Completa (3 challenges) |
+| 5 | Aprendizaje por refuerzo | [`clase5-reinforcement-learning/`](clase5-reinforcement-learning/) | Completa (4 entregas: 2 ejercicios y 2 notebooks de clase resueltos) |
 | 7 | Clasificación supervisada | [`clase7-clasificacion/`](clase7-clasificacion/) | Completa (5 ejercicios) |
 | 8 | Regresión | [`clase8-regresion/`](clase8-regresion/) | Completa |
 | 8 | Redes convolucionales | [`clase8-convolucion-cnn/`](clase8-convolucion-cnn/) | En progreso (6 ejercicios) |
@@ -92,6 +93,21 @@ Resultados sobre 300 episodios de evaluación:
 Como en este mundo se conoce la solución óptima, es posible medir cuánto le falta al agente durante el entrenamiento: la pérdida media de valor cae de `52.5` en el primer episodio a `1.03` al final.
 
 El análisis de cierre discute por qué solo el 74.9% de las acciones aprendidas coinciden con las óptimas y aun así el desempeño es prácticamente idéntico. La causa no son empates entre caminos equivalentes, que representan apenas el 1.4% de los estados, sino que los errores se concentran en zonas alejadas del corredor que el agente recorre. Q-Learning aprende bien únicamente lo que visita.
+
+[`clase5-reinforcement-learning/02_frozenlake_qlearning_resuelto.ipynb`](clase5-reinforcement-learning/02_frozenlake_qlearning_resuelto.ipynb)
+
+Trabajo en clase de Q-Learning con FrozenLake, con las 6 actividades, la comparación "qué cambió" y las 4 preguntas de cierre respondidas, y celdas de código que respaldan cada respuesta con números reales (semillas fijas y `aislado()` para que las verificaciones no consuman el generador global).
+
+- La Q-table de 16x4 = 64 valores pasa de 0 celdas distintas de cero a 35 tras 10 000 episodios; el estado 14 muestra la lectura de una fila (`Right = 1.0`, `Down = 0.95`, `Left` y `Up = 0.9025`).
+- En el ambiente determinístico la política greedy gana el 100% de los episodios. Explorar con `epsilon = 0.3` en evaluación la baja a 0.68.
+- En el ambiente resbaloso la media de evaluación es 0.702, pero entre 5 semillas varía de 0.158 a 0.748: el resultado es mucho menos estable.
+
+[`clase5-reinforcement-learning/03_taxi_qlearning_resuelto.ipynb`](clase5-reinforcement-learning/03_taxi_qlearning_resuelto.ipynb)
+
+Trabajo en casa de Q-Learning en Taxi-v4 (500 estados, 6 acciones, 3000 valores por aprender). Implementa `choose_action`, `update_q` y `train_q_learning`, la curva de aprendizaje, la comparación antes y después del entrenamiento, y responde las 7 preguntas.
+
+- La recompensa media sube de -308.9 en los primeros 100 episodios a +2.4 hacia el final, y se estabiliza cerca del episodio 1400. La política greedy resuelve el 100% de 200 episodios de evaluación (recompensa media cercana a 8).
+- Experimento de la pregunta 7 (solo `alpha`, 0.1 contra 0.5): con 0.5 se estabiliza hacia el episodio 531 en vez del 1473, con el mismo resultado final.
 
 [`clase5-reinforcement-learning/verificacion_rostros_rl.ipynb`](clase5-reinforcement-learning/verificacion_rostros_rl.ipynb)
 
