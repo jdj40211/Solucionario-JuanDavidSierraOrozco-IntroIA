@@ -15,7 +15,7 @@ Repositorio con las actividades y laboratorios de clase resueltos. Cada carpeta 
 | 3 | Optimización local | [`clase3-optimizacion/`](clase3-optimizacion/) | Completa |
 | 4 | Procesos de decisión de Markov | [`clase4-mdps/`](clase4-mdps/) | Completa |
 | 5 | Aprendizaje por refuerzo | [`clase5-reinforcement-learning/`](clase5-reinforcement-learning/) | Completa (2 entregas) |
-| 7 | Clasificación supervisada | [`clase7-clasificacion/`](clase7-clasificacion/) | Completa (4 ejercicios) |
+| 7 | Clasificación supervisada | [`clase7-clasificacion/`](clase7-clasificacion/) | Completa (5 ejercicios) |
 | 8 | Regresión | [`clase8-regresion/`](clase8-regresion/) | Completa |
 | 8 | Redes convolucionales | [`clase8-convolucion-cnn/`](clase8-convolucion-cnn/) | En progreso (6 ejercicios) |
 
@@ -159,6 +159,10 @@ Ejercicio 3: provocar subajuste y sobreajuste sobre Iris por dos vías —partic
 [`clase7-clasificacion/ejercicio4_ann_wine.ipynb`](clase7-clasificacion/ejercicio4_ann_wine.ipynb)
 
 Ejercicio 4: entrenar una ANN completa (no solo una neurona) para clasificar el Wine Dataset (178 vinos, 13 variables físico-químicas, 3 cultivares), con validación cruzada y partición 70/30. Arquitectura de una capa oculta, 13 entradas totalmente conectadas, activación sigmoide en ambas capas, 3 neuronas de salida (una por clase, codificación one-hot) y función de costo MSE, con backpropagation implementado desde cero.
+
+[`clase7-clasificacion/ejercicio5_mlp_wine.ipynb`](clase7-clasificacion/ejercicio5_mlp_wine.ipynb)
+
+Ejercicio 5: el mismo problema del Wine Dataset con `MLPClassifier` de scikit-learn, con validación cruzada y partición 70/30, y matriz de confusión para comparar con la ANN construida desde cero del ejercicio anterior.
 
 Es la continuación directa de los Ejercicios 2 y 3: backpropagation es la misma regla de la neurona única, aplicada dos veces en cadena, y hereda exactamente las mismas debilidades. **Se verifica antes de entrenar el modelo final**: `proline` va de 278 a 1680 mientras otras variables no pasan de 1, así que sin normalizar, el 100% de las neuronas ocultas satura y la exactitud cae a 38.9%, casi azar entre 3 clases. Estandarizando cada variable con la media y desviación del conjunto de entrenamiento (nunca con el de prueba, para no filtrar información), la exactitud sube a 98.1%, confirmada por una validación cruzada de 5 pliegues (98.3% ± 1.4%).
 
