@@ -18,6 +18,7 @@ Repositorio con las actividades y laboratorios de clase resueltos. Cada carpeta 
 | 7 | Clasificación supervisada | [`clase7-clasificacion/`](clase7-clasificacion/) | Completa (5 ejercicios) |
 | 8 | Regresión | [`clase8-regresion/`](clase8-regresion/) | Completa |
 | 8 | Redes convolucionales | [`clase8-convolucion-cnn/`](clase8-convolucion-cnn/) | En progreso (6 ejercicios) |
+| 9 | Chatbots con LLMs (NVIDIA NIM) | [`clase9-chatbots/`](clase9-chatbots/) | Resuelta; llamadas al modelo pendientes de API key |
 
 ---
 
@@ -269,3 +270,13 @@ jupyter lab
 ```
 
 Todos los notebooks están guardados con sus salidas ya calculadas, así que también se pueden leer directamente en GitHub sin ejecutarlos.
+
+---
+
+### Clase 9 — Chatbots con LLMs
+
+[`clase9-chatbots/semana9_ejercicio_documentos_nvidia.ipynb`](clase9-chatbots/semana9_ejercicio_documentos_nvidia.ipynb)
+
+Ejercicio del asistente de documentos sobre el paper "Attention Is All You Need", con NVIDIA NIM (Nemotron) y Gradio. Resueltos y ejecutados con salidas reales: extracción del PDF con `pypdf` (15 páginas, 39,599 caracteres), cliente compatible con OpenAI, `system` prompt con el documento, conversión del historial de Gradio, función de chat con streaming, `gr.ChatInterface` (se verifica que arranca y responde HTTP 200) y las mejoras 6A (medición de contexto), 6C (citas por página) y 6D (recuperación simple por palabras, con sus limitaciones). Incluye las respuestas de reflexión.
+
+**Bloqueado:** las llamadas reales al modelo (Paso 5 y las preguntas de prueba) necesitan `NVIDIA_API_KEY`, que no existe en el entorno donde se ejecutó. El notebook lo detecta e informa, no simula respuestas. Para completarlo, crear un `.env` con la clave y ejecutar de nuevo. Los demás notebooks de la semana (01 a 04 y tokenización) son laboratorios guiados sin actividades por resolver.
